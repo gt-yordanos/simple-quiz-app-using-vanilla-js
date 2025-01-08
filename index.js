@@ -314,7 +314,6 @@ function endQuiz() {
   document.querySelector(".restart-btn").addEventListener("click", restartQuiz);
 }
 
-// Restart quiz
 function restartQuiz() {
   // Reset state
   currentCategory = "";
@@ -336,4 +335,14 @@ function restartQuiz() {
   questionElement = document.querySelector(".quiz-container .question");
   optionsContainer = document.querySelector(".quiz-container .option");
   nextButton = document.querySelector(".quiz-container button");
+
+  // Reattach the "Next" button event listener
+  nextButton.addEventListener("click", () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData[currentCategory].length) {
+      showQuestion();
+    } else {
+      endQuiz();
+    }
+  });
 }
