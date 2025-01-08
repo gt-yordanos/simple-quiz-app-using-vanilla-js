@@ -217,11 +217,11 @@ const quizData = {
   ],
 };
 
-const categoryContainer = document.querySelector(".category-container");
-const quizContainer = document.querySelector(".quiz-container");
-const questionElement = document.querySelector(".quiz-container .question");
-const optionsContainer = document.querySelector(".quiz-container .option");
-const nextButton = document.querySelector(".quiz-container button");
+let categoryContainer = document.querySelector(".category-container");
+let quizContainer = document.querySelector(".quiz-container");
+let questionElement = document.querySelector(".quiz-container .question");
+let optionsContainer = document.querySelector(".quiz-container .option");
+let nextButton = document.querySelector(".quiz-container button");
 
 let currentCategory = "";
 let currentQuestionIndex = 0;
@@ -250,7 +250,7 @@ function startQuiz() {
 // Show question
 function showQuestion() {
   const currentQuestion = quizData[currentCategory][currentQuestionIndex];
-  questionElement.textContent = currentQuestionIndex+ 1 + ". " + currentQuestion.question;
+  questionElement.textContent = currentQuestionIndex + 1 + ". " + currentQuestion.question;
 
   // Clear old options
   optionsContainer.innerHTML = "";
@@ -307,13 +307,33 @@ nextButton.addEventListener("click", () => {
 // End quiz
 function endQuiz() {
   quizContainer.innerHTML = `
-    <p class= "score">Your Score: ${score} / ${quizData[currentCategory].length}</p>
-    <button onclick="restartQuiz()">Restart</button>
+    <p class="score">Your Score: ${score} / ${quizData[currentCategory].length}</p>
+    <button class="restart-btn">Restart</button>
   `;
+
+  document.querySelector(".restart-btn").addEventListener("click", restartQuiz);
 }
 
 // Restart quiz
 function restartQuiz() {
-  quizContainer.style.display = "none";
+  // Reset state
+  currentCategory = "";
+  currentQuestionIndex = 0;
+  score = 0;
+
+  // Reset UI
   categoryContainer.style.display = "flex";
+  quizContainer.style.display = "none";
+
+  // Restore quiz content and reinitialize
+  quizContainer.innerHTML = `
+    <p class="question"></p>
+    <div class="option"></div>
+    <button style="display: none;">Next</button>
+  `;
+
+  // Re-initialize DOM elements
+  questionElement = document.querySelector(".quiz-container .question");
+  optionsContainer = document.querySelector(".quiz-container .option");
+  nextButton = document.querySelector(".quiz-container button");
 }
